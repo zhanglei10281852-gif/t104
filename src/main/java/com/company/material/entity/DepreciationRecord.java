@@ -1,5 +1,6 @@
 package com.company.material.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.math.BigDecimal;
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 @Table(name = "depreciation_records", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"asset_id", "depreciationYear", "depreciationMonth"})
 })
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class DepreciationRecord {
 
     @Id

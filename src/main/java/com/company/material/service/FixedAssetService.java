@@ -187,22 +187,36 @@ public class FixedAssetService {
             throw new IllegalStateException("已处置或报废的资产不能调拨");
         }
 
+        boolean hasChange = false;
+        String newDept = transfer.getNewDepartment();
+        String newLoc = transfer.getNewLocation();
+        String newResp = transfer.getNewResponsiblePerson();
+
+        if (newDept == null) newDept = asset.getDepartment();
+        else hasChange = true;
+        if (newLoc == null) newLoc = asset.getLocation();
+        else hasChange = true;
+        if (newResp == null) newResp = asset.getResponsiblePerson();
+        else hasChange = true;
+
+        if (!hasChange) {
+            throw new IllegalArgumentException("调拨信息不能为空，请至少变更部门、位置或责任人中的一项");
+        }
+
         transfer.setId(null);
         transfer.setAsset(asset);
         transfer.setOldDepartment(asset.getDepartment());
         transfer.setOldLocation(asset.getLocation());
         transfer.setOldResponsiblePerson(asset.getResponsiblePerson());
+        transfer.setNewDepartment(newDept);
+        transfer.setNewLocation(newLoc);
+        transfer.setNewResponsiblePerson(newResp);
+        transfer.setTransferDate(LocalDate.now());
         transfer.setHandledBy(operator);
 
-        if (transfer.getNewDepartment() != null) {
-            asset.setDepartment(transfer.getNewDepartment());
-        }
-        if (transfer.getNewLocation() != null) {
-            asset.setLocation(transfer.getNewLocation());
-        }
-        if (transfer.getNewResponsiblePerson() != null) {
-            asset.setResponsiblePerson(transfer.getNewResponsiblePerson());
-        }
+        asset.setDepartment(newDept);
+        asset.setLocation(newLoc);
+        asset.setResponsiblePerson(newResp);
 
         fixedAssetRepository.save(asset);
         return assetTransferRepository.save(transfer);

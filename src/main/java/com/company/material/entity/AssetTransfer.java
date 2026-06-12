@@ -1,5 +1,6 @@
 package com.company.material.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDate;
@@ -8,6 +9,7 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @Table(name = "asset_transfers")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class AssetTransfer {
 
     @Id
