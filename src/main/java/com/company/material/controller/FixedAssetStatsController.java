@@ -97,9 +97,12 @@ public class FixedAssetStatsController {
             start.getYear(), start.getMonthValue());
         List<Map<String, Object>> result = new ArrayList<>();
         for (Object[] row : raw) {
+            Integer year = (Integer) row[0];
+            Integer month = (Integer) row[1];
+            String period = String.format("%d-%02d", year, month);
             Map<String, Object> item = new HashMap<>();
-            item.put("period", row[0]);
-            item.put("amount", row[1] != null ? row[1] : BigDecimal.ZERO);
+            item.put("period", period);
+            item.put("amount", row[2] != null ? row[2] : BigDecimal.ZERO);
             result.add(item);
         }
         return ResponseEntity.ok(result);

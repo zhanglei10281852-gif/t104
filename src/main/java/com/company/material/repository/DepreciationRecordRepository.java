@@ -29,8 +29,8 @@ public interface DepreciationRecordRepository extends JpaRepository<Depreciation
            "WHERE d.depreciationYear = :year AND d.depreciationMonth = :month")
     BigDecimal sumMonthlyDepreciation(@Param("year") Integer year, @Param("month") Integer month);
 
-    @Query("SELECT FUNCTION('CONCAT', d.depreciationYear, '-', LPAD(d.depreciationMonth, 2, '0')), " +
-           "SUM(d.monthlyDepreciation) FROM DepreciationRecord d " +
+    @Query("SELECT d.depreciationYear, d.depreciationMonth, SUM(d.monthlyDepreciation) " +
+           "FROM DepreciationRecord d " +
            "WHERE d.depreciationYear >= :startYear OR (d.depreciationYear = :startYear AND d.depreciationMonth >= :startMonth) " +
            "GROUP BY d.depreciationYear, d.depreciationMonth " +
            "ORDER BY d.depreciationYear, d.depreciationMonth")
